@@ -1,0 +1,2 @@
+ruby zombie.rb
+pause
