@@ -1,10 +1,12 @@
 require 'ruby2d'
-
-set background: 'green'
+set title: 'Tic-Tac-Toe'
+set background: 'navy'
+Image.new("home.jpg")
 
 message = Text.new('Click to begin')
 game_started = false
 square = nil
+
 
 on :mouse_down do |event|
   puts event.x, event.y
@@ -12,14 +14,11 @@ on :mouse_down do |event|
     if square.contains?(event.x, event.y)
       puts 'Click on square'
     end
+    
   else
     message.remove
 
-    square = Square.new(
-                        x: 100, y: 200,
-                        size: 125,
-                        color: 'purple'
-                      )
+    square = Image.new("circle.jpg")
     game_started = true
   end
 end
