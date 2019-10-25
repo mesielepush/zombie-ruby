@@ -1,47 +1,65 @@
 require 'ruby2d'
 set ({title: 'Tic-Tac-Toe',
-    background: 'back.png',
     width: 700,
-    height: 700 })
-o_sprite = Sprite.new(
-                      'o.png',
-                      x: 215,
-                      y: 350,
-                      clip_width:100,
-                      time:100,
-                      loop: true)
-x_sprite = Sprite.new(
-                        'x.png',
-                        x: 405,
-                        y: 350,
-                        clip_width:100,
-                        time:100,
-                        loop: true)
-o_sprite.play
-x_sprite.play
-title = Image.new('title.png',x:47,y:150)
+    height: 700,
+    fps_cap: 60 })
 
-message = Text.new('Click to begin',
-                    x: 250, y: 600,
-                    width:600,
-                    size:40,
-                    color: 'white')
+class Title
+  def initialize
+    @ranges = 0
+  end
+  def draw
+    title = Image.new('title.png',x:47,y:@ranges)
+  end
+  def move
+    @ranges +=2
+    if @ranges > 230
+      @ranges = 230
+    end
+  end
+
+end
+
+title = Title.new
+
+
+update do
+  clear
+  back = Image.new('back.png')
+  message = Image.new('begin.png',x: 225, y: 525)
+  
+  square = nil
+  title.move
+  title.draw
+end
 game_started = false
-square = nil
-
 
 on :mouse_down do |event|
   puts event.x, event.y
   if game_started
     title = nil
-    if square.contains?(event.x, event.y)
+    if a1.contains?(event.x, event.y)
       puts 'Click on square'
     end
-    
+      
   else
-    message.remove
-
-    table = Image.new("cover.jpg", x:35, y: 35)
+    table = Image.new("background.png", x:35, y: 35)
+    o_sprite = Sprite.new(
+                      'o.png',
+                      x: 115,
+                      y: 470,
+                      z: 5,
+                      clip_width:100,
+                      time:120,
+                      loop: true)
+    x_sprite = Sprite.new(
+                        'x.png',
+                        x: 505,
+                        y: 470,
+                        z: 5,
+                        clip_width:100,
+                        time:120,
+                        loop: true)
     a1 = Square.new(
       x: 97, y: 100,
       size: 150,
