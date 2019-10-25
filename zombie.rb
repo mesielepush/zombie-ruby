@@ -41,7 +41,7 @@ on :mouse_down do |event|
   else
     message.remove
 
-    table = Image.new("background.png", x:35, y: 35)
+    table = Image.new("cover.jpg", x:35, y: 35)
     a1 = Square.new(
       x: 97, y: 100,
       size: 150,
@@ -58,7 +58,7 @@ on :mouse_down do |event|
       color: 'blue',
       z: 10)
     b1 = Square.new(
-      x: 97, y: 200,
+      x: 97, y: 250,
       size: 150,
       color: 'red',
       z: 10)
@@ -83,7 +83,7 @@ on :mouse_down do |event|
       color: 'green',
       z: 10)
     c3 = Square.new(
-      x: 497, y: 300,
+      x: 459, y: 300,
       size: 150,
       color: 'green',
       z: 10)
