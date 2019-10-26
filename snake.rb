@@ -11,6 +11,7 @@ class Snake
   def initialize
     @positions = [[2,0],[2,1],[2,2],[2,3]]
     @direction = 'down'
+    @growing = false
   end
 
   def draw
@@ -20,7 +21,9 @@ class Snake
   end
 
   def move
-    @positions.shift
+    if !@growing
+      @positions.shift
+    end
     case @direction
     when 'down'
       @positions.push(rim(head[0],head[1]+1))
@@ -31,6 +34,7 @@ class Snake
     when 'right'
       @positions.push(rim(head[0]+1,head[1]))
     end
+    @growing = false
   end
 
   def could_i?(where)
@@ -44,10 +48,19 @@ class Snake
     when 'right'
       true unless where == 'left'
     end
+
   end
 
   def rim(x, y)
     [x % GRID_WIDTH, y % GRID_HEIGHT]
+  end
+
+  def grow
+    @growing = true
+  end
+
+  def hit_itself?
+   @positions.uniq.length != @positions.length
   end
 
   def head
@@ -61,6 +74,7 @@ class Game
     @score = 0
     @ball_x = rand(GRID_WIDTH)
     @ball_y = rand(GRID_HEIGHT)
+    @finished = false
   end
 
   def draw
@@ -77,6 +91,14 @@ class Game
     @ball_y = rand(GRID_HEIGHT)
   end
 
+  def finish
+    puts 'finish GAIM'
+    @finished = true
+  end
+
+  def finished?
+    @finished
+  end
 end
 
 
@@ -84,12 +106,20 @@ snake = Snake.new
 game = Game.new
 update do
   clear
-  snake.move
+  unless game.finished?
+    snake.move
+  end
   snake.draw
   game.draw
   if game.is_hit?(snake.head[0],snake.head[1])
     game.record_hit
+    snake.grow
   end
+
+  if snake.hit_itself?
+    game.finish
+  end
+
 end
 
 on :key_down do |event|
