@@ -1,0 +1,2 @@
+ruby snake.rb
+pause
