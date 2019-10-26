@@ -1,13 +1,13 @@
 require 'ruby2d'
 
 set background: 'navy'
-set fps_cap: 20
+set fps_cap: 10
 GRID_SIZE = 20
 GRID_WIDTH = Window.width / GRID_SIZE
 GRID_HEIGHT = Window.height / GRID_SIZE
 class Snake
   attr_writer :direction
-
+  attr_accessor :head
   def initialize
     @positions = [[2,0],[2,1],[2,2],[2,3]]
     @direction = 'down'
@@ -50,7 +50,6 @@ class Snake
     [x % GRID_WIDTH, y % GRID_HEIGHT]
   end
 
-  private
   def head
     @positions.last
   end
@@ -69,6 +68,15 @@ class Game
     Text.new("Score: #{@score}", color: 'white', x: 10, y: 10, size:25)
   end
 
+  def is_hit?(x_hit,y_hit)
+    @ball_x == x_hit and @ball_y == y_hit
+  end
+  def record_hit
+    @score += 1
+    @ball_x = rand(GRID_WIDTH)
+    @ball_y = rand(GRID_HEIGHT)
+  end
+
 end
 
 
@@ -79,6 +87,9 @@ update do
   snake.move
   snake.draw
   game.draw
+  if game.is_hit?(snake.head[0],snake.head[1])
+    game.record_hit
+  end
 end
 
 on :key_down do |event|
