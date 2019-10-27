@@ -64,6 +64,10 @@ class GameWindow < Gosu::Window
     @background = Gosu::Image.new("back.png")
     @title = Gosu::Image.new("title.png")
     @bestes = Gosu::Image.new("bestes.png")
+    @music = Gosu::Song.new('intro.mp3')
+    @music.volume = 0.5
+    @music.play(true)
+
     @title_y = 0
     @bestes_x = 700
   end
@@ -87,6 +91,7 @@ class GameWindow < Gosu::Window
   end
 
   def draw
+    @music.play
     @background.draw(0, 0, 0)
     @title.draw(50, @title_y, 1)
     @bestes.draw( @bestes_x,250, 1)
