@@ -1,2 +1,0 @@
-ruby ping.rb
-pause

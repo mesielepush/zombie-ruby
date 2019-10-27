@@ -1,21 +1,38 @@
 require 'ruby2d'
+grid = 700
 set ({title: 'Tic-Tac-Toe',
-    width: 700,
-    height: 700,
+    width: grid,
+    height: grid,
     fps_cap: 60 })
 
 intro = Music.new('intro.mp3')
 
 class Title
-  attr_accessor :title, :best
+  attr_accessor :title, :best, :run, :eye_candy
+  attr_writer :run
   def initialize
     @title_one = 0
     @bestes = 1000
+    @run = 100
+    @eye_candy = Sprite.new(
+                        'mario.png',
+                        clip_width: 46,
+                        time: 50,
+                        height: 300,
+                        width: 100,
+                        x: @run,
+                        y:200,
+                        z:1,
+                        loop: true
+                      )
+    
+    
   end
   def draw
+    @back = Image.new('back.png',z:0,width: 700,height: 700)
     @title = Image.new('title.png',x:47,y:@title_one)
     @best = Image.new('bestes.png',x:15,y:@bestes)
-    @back = Image.new('back.png',z:-1,width: 700,height: 700,)
+    
   end
 
   def remove
@@ -26,6 +43,7 @@ class Title
 
   def move
     @title_one +=2
+    
     if @title_one > 57
       @title_one = 57
     end
@@ -33,6 +51,7 @@ class Title
     if @bestes < 400
       @bestes = 400
     end
+    
   end
 
 end
@@ -42,8 +61,8 @@ class Board
   end
 
   def draw
-    @back_wood = Image.new('background.png')
-    @board = Image.new('back_wood.png', z:-1)
+    @back_wood = Image.new('background.png',x: 30, y:30)
+    @board = Image.new('back_wood.png',z:-1)
   end
 end
 
@@ -52,11 +71,14 @@ title = Title.new
 game = Board.new
 intro.volume = 10
 intro.play
+
+
 update do
-  clear
-  square = nil
+  title.eye_candy.play
+  title.run += 10
   title.move
   title.draw
+  
   if game_started
     title.remove
     game.draw
