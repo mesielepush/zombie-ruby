@@ -4,35 +4,54 @@ set ({title: 'Tic-Tac-Toe',
     height: 700,
     fps_cap: 60 })
 
+intro = Music.new('intro.mp3')
+
 class Title
+  attr_accessor :title, :best
   def initialize
-    @ranges = 0
+    @title_one = 0
+    @bestes = 1000
   end
   def draw
-    title = Image.new('title.png',x:47,y:@ranges)
+    @title = Image.new('title.png',x:47,y:@title_one)
+    @best = Image.new('bestes.png',x:15,y:@bestes)
+    @back = Image.new('back.png',z:-1,width: 700,height: 700,)
   end
+
+  def remove
+    @title.remove
+    @best.remove
+    @back.remove
+  end
+
   def move
-    @ranges +=2
-    if @ranges > 230
-      @ranges = 230
+    @title_one +=2
+    if @title_one > 57
+      @title_one = 57
+    end
+    @bestes -= 2
+    if @bestes < 400
+      @bestes = 400
     end
   end
 
 end
+game_started = false
 
 title = Title.new
-
-
+intro.volume = 10
+intro.play
 update do
   clear
-  back = Image.new('back.png')
-  message = Image.new('begin.png',x: 225, y: 525)
   
   square = nil
   title.move
   title.draw
+  if game_started
+    title.remove
+  end
 end
-game_started = false
+
 
 on :mouse_down do |event|
   puts event.x, event.y
@@ -44,67 +63,7 @@ on :mouse_down do |event|
       
   else
     table = Image.new("background.png", x:35, y: 35)
-    o_sprite = Sprite.new(
-                      'o.png',
-                      x: 115,
-                      y: 470,
-                      z: 5,
-                      clip_width:100,
-                      time:120,
-                      loop: true)
-    x_sprite = Sprite.new(
-                        'x.png',
-                        x: 505,
-                        y: 470,
-                        z: 5,
-                        clip_width:100,
-                        time:120,
-                        loop: true)
-    a1 = Square.new(
-      x: 97, y: 100,
-      size: 150,
-      color: 'blue',
-      z: 10)
-    a2 = Square.new(
-      x: 274, y: 100,
-      size: 150,
-      color: 'blue',
-      z: 10)
-    a3 = Square.new(
-      x: 459, y: 100,
-      size: 150,
-      color: 'blue',
-      z: 10)
-    b1 = Square.new(
-      x: 97, y: 250,
-      size: 150,
-      color: 'red',
-      z: 10)
-    b2 = Square.new(
-      x: 274, y: 200,
-      size: 150,
-      color: 'red',
-      z: 10)
-    b3 = Square.new(
-      x: 459, y: 200,
-      size: 150,
-      color: 'red',
-      z: 10)
-    c1 = Square.new(
-      x: 97, y: 300,
-      size: 150,
-      color: 'green',
-      z: 10)
-    c2 = Square.new(
-      x: 274, y: 300,
-      size: 150,
-      color: 'green',
-      z: 10)
-    c3 = Square.new(
-      x: 459, y: 300,
-      size: 150,
-      color: 'green',
-      z: 10)
+    
     game_started = true
   end
 end
