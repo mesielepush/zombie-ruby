@@ -1,48 +1,95 @@
 require 'gosu'
 
-class GameWindow < Gosu::Window
-  def initialize(width=320, height=240, fullscreen=false)
-    super
-    self.caption = 'Hello Movement'
-    @x = @y = 10
-    @draws = 0
-    @buttons_down = 0
-    @font = Gosu::Font.new(self, Gosu::default_font_name, 20)
+def media_path(file)
+  File.join(File.dirname(File.dirname(
+  __FILE__)), 'media', file)
+end
+
+class Explosion
+  FRAME_DELAY = 10 # ms
+  SPRITE = 'coin.png'
+
+  def self.load_animation(window)
+    Gosu::Image.load_tiles(
+    window, SPRITE, 35, 300, true)
+  end
+
+  def initialize(animation, x, y)
+    @animation = animation
+    @x, @y = x, y
+    @current_frame = 0
   end
 
   def update
-    @x -= 1 if button_down?(Gosu::KbLeft)
-    @x += 1 if button_down?(Gosu::KbRight)
-    @y -= 1 if button_down?(Gosu::KbUp)
-    @y += 1 if button_down?(Gosu::KbDown)
-  end
-
-  def button_down(id)
-    close if id == Gosu::KbEscape
-    @buttons_down += 1
-  end
-
-  def button_up(id)
-    @buttons_down -= 1
-  end
-
-  def needs_redraw?
-    @draws == 0 || @buttons_down > 0
+    @current_frame += 1 if frame_expired?
   end
 
   def draw
-    @draws += 1
-    
+    return if done?
+    image = current_frame
+    image.draw(
+    @x - image.width / 2.0,
+    @y - image.height / 2.0,
+    0)
+  end
 
-    @font.draw_text(info, @x, @y, 1, 1.0, 1.0, Gosu::Color::WHITE)
-
-    
+  def done?
+    @done ||= @current_frame == @animation.size
   end
 
   private
 
-  def info
-    "[x:#{@x};y:#{@y};draws:#{@draws}]"
+  def current_frame
+    @animation[@current_frame % @animation.size]
+  end
+
+  def frame_expired?
+    now = Gosu.milliseconds
+    @last_frame ||= now
+    if (now - @last_frame) > FRAME_DELAY
+    @last_frame = now
+    end
+  end
+end
+
+class GameWindow < Gosu::Window
+  BACKGROUND = 'back.png'
+
+  def initialize(width=700, height=700, fullscreen=false)
+    super
+    self.caption = 'Hello Animation'
+    @background = Gosu::Image.new(
+    self, BACKGROUND,z:-1)
+    @animation = Explosion.load_animation(self)
+    @explosions = []
+  end
+
+  def update
+    @explosions.reject!(&:done?)
+    @explosions.map(&:update)
+  end
+
+  def button_down(id)
+    close if id == Gosu::KbEscape
+    if id == Gosu::MsLeft
+    @explosions.push(
+    Explosion.new(
+    @animation, mouse_x, mouse_y))
+    end
+  end
+
+  def needs_cursor?
+    true
+  end
+
+  def needs_redraw?
+    !@scene_ready || @explosions.any?
+  end
+
+  def draw
+    @scene_ready ||= true
+    @background.draw(0, 0, 0)
+    @explosions.map(&:draw)
   end
 end
 
