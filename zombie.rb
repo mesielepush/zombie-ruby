@@ -36,19 +36,30 @@ class Title
   end
 
 end
-game_started = false
 
+class Board
+  def initialize
+  end
+
+  def draw
+    @back_wood = Image.new('background.png')
+    @board = Image.new('back_wood.png', z:-1)
+  end
+end
+
+game_started = false
 title = Title.new
+game = Board.new
 intro.volume = 10
 intro.play
 update do
   clear
-  
   square = nil
   title.move
   title.draw
   if game_started
     title.remove
+    game.draw
   end
 end
 
@@ -56,15 +67,10 @@ end
 on :mouse_down do |event|
   puts event.x, event.y
   if game_started
-    title = nil
-    if a1.contains?(event.x, event.y)
-      puts 'Click on square'
-    end
-      
+    table = Image.new("back1.png", x:35, y: 35)
   else
-    table = Image.new("background.png", x:35, y: 35)
-    
     game_started = true
   end
 end
+
 show
