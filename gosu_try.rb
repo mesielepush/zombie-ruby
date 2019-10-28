@@ -17,7 +17,7 @@ end
 
 class Eye_candy
   def initialize(x, y)
-    @frames = Gosu::Image.load_tiles 'mario2.png', 46, 143
+    @frames = Gosu::Image.load_tiles 'mario.png', 69, 211
     @x, @y = x, y
     @move = {:left => Animation.new(@frames, 0.05),
              :right => Animation.new(@frames, 0.05)}
@@ -36,7 +36,7 @@ class Eye_candy
 
   def move(direction)
     @x += @movements[direction]
-    @x %= 700
+    @x %= 710
     
     @facing = direction
     @moving = true if @moving != true
@@ -53,7 +53,7 @@ class GameWindow < Gosu::Window
   attr_writer :bestes_y, :title_y , :gaming, :board
   def initialize
     super 700, 700
-    @player = Eye_candy.new 0, 440
+    @player = Eye_candy.new 0, 360
     
     @key = {kb_left: Gosu::KbLeft,
             kb_right: Gosu::KbRight,
