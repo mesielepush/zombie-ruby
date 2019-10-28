@@ -50,7 +50,7 @@ end
 ################################### GAME MAIN ################################
 
 class GameWindow < Gosu::Window
-  attr_writer :bestes_y, :title_y
+  attr_writer :bestes_y, :title_y , :gaming
   def initialize
     super 700, 700
     @player = Eye_candy.new 0, 440
@@ -59,34 +59,51 @@ class GameWindow < Gosu::Window
             kb_right: Gosu::KbRight,
             gp_left: Gosu::GpLeft,
             gp_right: Gosu::GpRight,
-            enter: Gosu::KB_RETURN
+            enter: Gosu::KB_RETURN,
+            space: Gosu::KB_SPACE
             }
     @background = Gosu::Image.new("back.png")
-    @title = Gosu::Image.new("title.png")
-    @bestes = Gosu::Image.new("bestes.png")
-    @music = Gosu::Song.new('intro.mp3')
-    @music.volume = 0.5
+    @title      = Gosu::Image.new("title.png")
+    @bestes     = Gosu::Image.new("bestes.png")
+    @music      = Gosu::Song.new('intro.mp3')
+    @music.volume = 0.3
     @music.play(true)
-
+    @enter = Gosu::Sample.new('enter_game.mp3')
     @title_y = 0
     @bestes_x = 700
+    @gaming = false
+
+    @back_board = Gosu::Image.new()
   end
 
   def update
-    if Gosu::button_down? @key[:kb_left] or Gosu::button_down? @key[:gp_left] then
-      @player.move :left
-    end
-    if Gosu::button_down? @key[:kb_right] or Gosu::button_down? @key[:gp_right] then
-      @player.move :right
-    end
-    puts Gosu::button_down? @key[:enter]
-    @title_y += 2
-    if @title_y > 70
-      @title_y = 70
-    end
-    @bestes_x -= 5
-    if @bestes_x < -400
-      @bestes_x = 700
+    if @gaming == false
+      puts 'FALSEEE'
+      if Gosu::button_down? @key[:kb_left] or Gosu::button_down? @key[:gp_left] then
+        @player.move :left
+      end
+      if Gosu::button_down? @key[:kb_right] or Gosu::button_down? @key[:gp_right] then
+        @player.move :right
+      end
+      if Gosu::button_down? @key[:space]
+        @gaming = true
+      end
+      @title_y += 2
+      if @title_y > 70
+        @title_y = 70
+      end
+      @bestes_x -= 5
+      if @bestes_x < -400
+        @bestes_x = 700
+      end
+
+    else
+      @background  = nil
+      @title   = nil
+      @bestes = nil
+      @music  = nil
+      @player = nil
+      puts 'OOOOOOOOOOOOOOOOOOOOOOOONNNNNNNN'
     end
   end
 
@@ -102,6 +119,7 @@ class GameWindow < Gosu::Window
   def button_up(id)
     if id == @key[:kb_left] or id == @key[:gp_left] then
       @player.stop_move
+      
     end
     if id == @key[:kb_right] or id == @key[:gp_right] then
       @player.stop_move
