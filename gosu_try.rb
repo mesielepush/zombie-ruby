@@ -36,7 +36,7 @@ class Eye_candy
 
   def move(direction)
     @x += @movements[direction]
-    @x %= 640
+    @x %= 700
     
     @facing = direction
     @moving = true if @moving != true
@@ -183,6 +183,10 @@ class GameWindow < Gosu::Window
           @board[:c3] = [true,561,431] unless @board[:c3][0] == 'o'
         end
       end
+    else
+      if Gosu::button_down? @key[:m_left]
+        @empty_choose.play(volume = 0.3)
+      end
     end
     
   end
@@ -246,6 +250,10 @@ class GameWindow < Gosu::Window
           @board[:c3] = ['o',561,431] unless @board[:c3][0] == true
         end
       end
+    else
+      if Gosu::button_down? @key[:m_right]
+        @empty_choose.play(volume = 0.3)
+      end
     end
   end
 
@@ -302,7 +310,7 @@ class GameWindow < Gosu::Window
 
       elsif Gosu::button_down? @key[:m_right]
         @cursor_down.draw self.mouse_x, self.mouse_y, 0
-        @comp_choose.play(volume = 0.5)
+        
       else
         @cursor.draw self.mouse_x, self.mouse_y, 0
 
