@@ -68,17 +68,22 @@ class GameWindow < Gosu::Window
             a1: [false, nil, nil],
             a2: [false, nil, nil],
             a3: [false, nil, nil],
-            B1: [false, nil, nil],
-            B2: [false, nil, nil],
-            B3: [false, nil, nil],
-            C1: [false, nil, nil],
-            C2: [false, nil, nil],
-            C3: [false, nil, nil],
+            b1: [false, nil, nil],
+            b2: [false, nil, nil],
+            b3: [false, nil, nil],
+            c1: [false, nil, nil],
+            c2: [false, nil, nil],
+            c3: [false, nil, nil],
             }
     @xs = []
     @xs << Gosu::Image.new("4.png")
     @xs << Gosu::Image.new("5.png")
     @xs << Gosu::Image.new("6.png")
+    @os = []
+    @os << Gosu::Image.new("1.png")
+    @os << Gosu::Image.new("2.png")
+    @os << Gosu::Image.new("3.png")
+
     @background = Gosu::Image.new("back.png")
     @title      = Gosu::Image.new("title.png")
     @bestes     = Gosu::Image.new("bestes.png")
@@ -104,19 +109,149 @@ class GameWindow < Gosu::Window
   end
   
   def draw_board
+    
     @board.each do |coord|
-      puts 'coord[0]: ' + coord[1][0].to_s
-      puts 'coord[1]: ' + coord[1][1].to_s
-      puts 'coord[2]: ' + coord[1][2].to_s
+      #puts 'coord[0]: ' + coord[1][0].to_s
+      #puts 'coord[1]: ' + coord[1][1].to_s
+      #puts 'coord[2]: ' + coord[1][2].to_s
       if coord[1][0] == true
         @xs[rand(0..2)].draw(coord[1][1], coord[1][2], 10)
+      end
+      if coord[1][0] == 'o'
+        @os[rand(0..2)].draw(coord[1][1], coord[1][2], 10)
+      end
+    end
+  end
+
+  def user_click
+    case mouse_x
+    when 208..350
+      if mouse_y > 117 and mouse_y <  275
+        if Gosu::button_down? @key[:m_left]
+          @choose.play(volume = 0.3)
+          @board[:a1] = [true,208,117] unless @board[:a1][0] == 'o'
+        end
+      end
+      if mouse_y > 280 and mouse_y < 421
+        if Gosu::button_down? @key[:m_left]
+          @choose.play(volume = 0.3)
+          @board[:b1] = [true,208,280] unless @board[:b1][0] == 'o'
+        end
+      end
+      if mouse_y > 431 and mouse_y < 575
+        if Gosu::button_down? @key[:m_left]
+          @choose.play(volume = 0.3)
+          @board[:c1] = [true,208,431] unless @board[:c1][0] == 'o'
+        end
+      end
+      
+    when 378..540
+      if mouse_y > 117 and mouse_y <  275
+        if Gosu::button_down? @key[:m_left]
+          @choose.play(volume = 0.3)
+          @board[:a2] = [true,378,117] unless @board[:a2][0] == 'o'
+        end
+      end
+      if mouse_y > 280 and mouse_y < 421
+        if Gosu::button_down? @key[:m_left]
+          @choose.play(volume = 0.3)
+          @board[:b2] = [true,378,280] unless @board[:b2][0] == 'o'
+        end
+      end
+      if mouse_y > 431 and mouse_y < 575
+        if Gosu::button_down? @key[:m_left]
+          @choose.play(volume = 0.3)
+          @board[:c2] = [true,378,431] unless @board[:c2][0] == 'o'
+        end
+      end
+    when 561..699
+      if mouse_y > 117 and mouse_y <  275
+        if Gosu::button_down? @key[:m_left]
+          @choose.play(volume = 0.3)
+          @board[:a3] = [true,561,117] unless @board[:a3][0] == 'o'
+        end
+      end
+      if mouse_y > 280 and mouse_y < 421
+        if Gosu::button_down? @key[:m_left]
+          @choose.play(volume = 0.3)
+          @board[:b3] = [true,561,280] unless @board[:b3][0] == 'o'
+        end
+      end
+      if mouse_y > 431 and mouse_y < 575
+        if Gosu::button_down? @key[:m_left]
+          @choose.play(volume = 0.3)
+          @board[:c3] = [true,561,431] unless @board[:c3][0] == 'o'
+        end
+      end
+    end
+    
+  end
+  def comp_click
+    case mouse_x
+    when 208..350
+      if mouse_y > 117 and mouse_y <  275
+        if Gosu::button_down? @key[:m_right]
+          @comp_choose.play(volume = 0.3)
+          @board[:a1] = ['o',208,117] unless @board[:a1][0] == true
+        end
+      end
+      if mouse_y > 280 and mouse_y < 421
+        if Gosu::button_down? @key[:m_right]
+          @comp_choose.play(volume = 0.3)
+          @board[:b1] = ['o',208,280] unless @board[:b1][0] == true
+        end
+      end
+      if mouse_y > 431 and mouse_y < 575
+        if Gosu::button_down? @key[:m_right]
+          @comp_choose.play(volume = 0.3)
+          @board[:c1] = ['o',208,431] unless @board[:c1][0] == true
+        end
+      end
+      
+    when 378..540
+      if mouse_y > 117 and mouse_y <  275
+        if Gosu::button_down? @key[:m_right]
+          @comp_choose.play(volume = 0.3)
+          @board[:a2] = ['o',378,117] unless @board[:a2][0] == true
+        end
+      end
+      if mouse_y > 280 and mouse_y < 421
+        if Gosu::button_down? @key[:m_right]
+          @comp_choose.play(volume = 0.3)
+          @board[:b2] = ['o',378,280] unless @board[:b2][0] == true
+        end
+      end
+      if mouse_y > 431 and mouse_y < 575
+        if Gosu::button_down? @key[:m_right]
+          @comp_choose.play(volume = 0.3)
+          @board[:c2] = ['o',378,431] unless @board[:c2][0] == true
+        end
+      end
+    when 561..699
+      if mouse_y > 117 and mouse_y <  275
+        if Gosu::button_down? @key[:m_right]
+          @comp_choose.play(volume = 0.3)
+          @board[:a3] = ['o',561,117] unless @board[:a3][0] == true
+        end
+      end
+      if mouse_y > 280 and mouse_y < 421
+        if Gosu::button_down? @key[:m_right]
+          @comp_choose.play(volume = 0.3)
+          @board[:b3] = ['o',561,280] unless @board[:b3][0] == true
+        end
+      end
+      if mouse_y > 431 and mouse_y < 575
+        if Gosu::button_down? @key[:m_right]
+          @comp_choose.play(volume = 0.3)
+          @board[:c3] = ['o',561,431] unless @board[:c3][0] == true
+        end
       end
     end
   end
 
   def update
     if @gaming == false
-      puts 'FALSEEE'
+      
       if Gosu::button_down? @key[:kb_left] or Gosu::button_down? @key[:gp_left] then
         @player.move :left
       end
@@ -138,15 +273,14 @@ class GameWindow < Gosu::Window
     end
 
     if @gaming == true
-      puts @board.values
-      @intro.play(true)
       
-      if self.mouse_x > 208 and self.mouse_x < 350 and self.mouse_y > 117 and self.mouse_y < 275
-        if Gosu::button_down? @key[:m_left]
-          @choose.play(volume = 0.3)
-          @board[:a1] = [true,208,117]
-        end      
-      end
+      puts 'x: ' + self.mouse_x.to_s
+      puts 'y: ' +self.mouse_y.to_s
+      
+      @intro.play(true)
+      user_click
+      comp_click
+      
     end
   end
 
