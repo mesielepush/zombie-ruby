@@ -72,8 +72,7 @@ class GameWindow < Gosu::Window
     @title_y = 0
     @bestes_x = 700
     @gaming = false
-
-    @back_board = Gosu::Image.new()
+    @back_board = Gosu::Image.new('back_game.png')
   end
 
   def update
@@ -96,24 +95,24 @@ class GameWindow < Gosu::Window
       if @bestes_x < -400
         @bestes_x = 700
       end
-
-    else
-      @background  = nil
-      @title   = nil
-      @bestes = nil
-      @music  = nil
-      @player = nil
+    end
+    if @gaming == true
       puts 'OOOOOOOOOOOOOOOOOOOOOOOONNNNNNNN'
+    
     end
   end
 
   def draw
-    @music.play
-    @background.draw(0, 0, 0)
-    @title.draw(50, @title_y, 1)
-    @bestes.draw( @bestes_x,250, 1)
-    @player.draw
-
+    if @gaming == false
+      @music.play
+      @background.draw(0, 0, 0)
+      @title.draw(50, @title_y, 1)
+      @bestes.draw( @bestes_x,250, 1)
+      @player.draw
+    end
+    if @gaming == true
+      @back_board.draw(0, 0, 0)
+    end
   end
 
   def button_up(id)
