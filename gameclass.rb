@@ -18,6 +18,7 @@ class GameWindow < Gosu::Window
     @title_y = 0
     @bestes_x = 700
     @gaming = false
+    @end_game_screen = false
     @turn = ['player']
   end
   
@@ -40,6 +41,16 @@ class GameWindow < Gosu::Window
     true if @turn.last == 'computer'
   end
 
+  def somebody_won?
+    
+    return true if @board[:a1][0] and @board[:a2][0] and @board[:a3][0]
+    return true if @board[:b1][0] and @board[:b2][0] and @board[:b3][0]
+    return true if @board[:c1][0] and @board[:c2][0] and @board[:c3][0]
+    return true if @board[:a1][0] and @board[:b2][0] and @board[:c3][0]
+    return true if @board[:c1][0] and @board[:b2][0] and @board[:a3][0]
+    false
+  end
+
   def place_play(coord)
     if Gosu::button_down? @key[:m_left] and is_my_turn?
       @sounds[:choose].play(volume = 0.3)
@@ -50,7 +61,9 @@ class GameWindow < Gosu::Window
       @board[coord] = ['o',@square_coord[coord][0].first,@square_coord[coord][1].first] unless @board[coord][0] == true
       @turn.push('player')
     else
-      @sounds[:empty_choose].play(volume = 0.3)
+      if Gosu::button_down? @key[:m_right] || @key[:m_left]
+        @sounds[:empty_choose].play(volume = 0.3)
+      end
     end
   end
 
@@ -87,19 +100,23 @@ class GameWindow < Gosu::Window
     end
 
     if @gaming == true
-      
-      puts 'x: ' + self.mouse_x.to_s
-      puts 'y: ' +self.mouse_y.to_s
-      
       @sounds[:intro].play(true)
       check_click
-      
+      if somebody_won?
+        @end_game_screen = true 
+        @gaming = false
+      end
     end
+
+    if @end_game_screen == true
+      @sounds[:intro].stop
+    end
+
+
   end
 
   def draw
     if @gaming == false
-      
       @img[:background].draw(0, 0, 0)
       @img[:title].draw(50, @title_y, 1)
       @img[:bestes].draw( @bestes_x,250, 1)
@@ -111,16 +128,11 @@ class GameWindow < Gosu::Window
       draw_board
       if Gosu::button_down? @key[:m_left]
         @img[:cursor_down].draw self.mouse_x, self.mouse_y, 0
-        
-
       elsif Gosu::button_down? @key[:m_right]
         @img[:cursor_down].draw self.mouse_x, self.mouse_y, 0
-        
       else
         @img[:cursor].draw self.mouse_x, self.mouse_y, 0
-
       end
-      
     end
   end
 
