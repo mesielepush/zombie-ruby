@@ -18,7 +18,7 @@ class GameWindow < Gosu::Window
     @title_y = 0
     @bestes_x = 700
     @gaming = false
-    
+    @turn = ['player']
   end
   
   def draw_board
@@ -31,22 +31,33 @@ class GameWindow < Gosu::Window
       end
     end
   end
+  
+  def is_my_turn?
+    true if @turn.last == 'player'
+  end
+  
+  def is_his_turn?
+    true if @turn.last == 'computer'
+  end
 
-  def place_play(coord, click)
-    if Gosu::button_down? @key[:m_left]
+  def place_play(coord)
+    if Gosu::button_down? @key[:m_left] and is_my_turn?
       @sounds[:choose].play(volume = 0.3)
       @board[coord] = [true,@square_coord[coord][0].first,@square_coord[coord][1].first] unless @board[coord][0] == 'o'
-    end
-    if Gosu::button_down? @key[:m_right]
+      @turn.push('computer')
+    elsif Gosu::button_down? @key[:m_right] and is_his_turn?
       @sounds[:comp_choose].play(volume = 0.3)
       @board[coord] = ['o',@square_coord[coord][0].first,@square_coord[coord][1].first] unless @board[coord][0] == true
+      @turn.push('player')
+    else
+      @sounds[:empty_choose].play(volume = 0.3)
     end
   end
 
   def check_click
     @square_coord.each do |key,value|
       if value[0].include? mouse_x and value[1].include? mouse_y
-        place_play(key, @key[:m_left])
+        place_play(key)
       end
     end
   end
@@ -110,9 +121,6 @@ class GameWindow < Gosu::Window
 
       end
       
-
-      #puts 'x : '+self.mouse_x().to_s
-      #puts 'y : '+self.mouse_y().to_s
     end
   end
 

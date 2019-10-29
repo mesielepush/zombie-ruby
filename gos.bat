@@ -1,2 +1,2 @@
-ruby gosu_try.rb
+ruby gameclass.rb
 pause
