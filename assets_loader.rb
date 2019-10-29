@@ -13,7 +13,9 @@ def load_audiovisual
         bestes: Gosu::Image.new("bestes.png"),
         back_board: Gosu::Image.new('back_game.png'),
         cursor: Gosu::Image.new('cursor.png'),
-        cursor_down: Gosu::Image.new('cursor_down.png')
+        cursor_down: Gosu::Image.new('cursor_down.png'),
+        winning_back: Gosu::Image.new('winning_back.png'),
+        vertical_o:Gosu::Image.new('o_vertical_comb.png'),
     }
     sounds = {
         intro_cover: Gosu::Song.new('intro_1.mp3'),
@@ -22,6 +24,7 @@ def load_audiovisual
         empty_choose: Gosu::Sample.new('choose.mp3'),
         choose: Gosu::Sample.new('coin.mp3'),
         comp_choose: Gosu::Sample.new('comp_choose.mp3'),
+        win:Gosu::Song.new('win.mp3'),
     }
     
     return xs, os, img, sounds
@@ -69,10 +72,17 @@ def winning_combo(dic)
     return [true,3] if dic[:c1][0] == true and dic[:c2][0] == true and dic[:c3][0] == true
     return [true,4] if dic[:a1][0] == true and dic[:b2][0] == true and dic[:c3][0] == true
     return [true,5] if dic[:c1][0] == true and dic[:b2][0] == true and dic[:a3][0] == true
-    return ['o',6]  if dic[:a1][0] == 'o' and dic[:a2][0] == 'o' and dic[:a3][0] == 'o'
-    return ['o',7]  if dic[:b1][0] == 'o' and dic[:b2][0] == 'o' and dic[:b3][0] == 'o'
-    return ['o',8]  if dic[:c1][0] == 'o' and dic[:c2][0] == 'o' and dic[:c3][0] == 'o'
-    return ['o',9]  if dic[:a1][0] == 'o' and dic[:b2][0] == 'o' and dic[:c3][0] == 'o'
-    return ['o',10] if dic[:c1][0] == 'o' and dic[:b2][0] == 'o' and dic[:a3][0] == 'o'
-    false
+    return [true,6] if dic[:a1][0] == true and dic[:b1][0] == true and dic[:c1][0] == true
+    return [true,7] if dic[:b2][0] == true and dic[:a2][0] == true and dic[:c2][0] == true
+    return [true,8] if dic[:c3][0] == true and dic[:b3][0] == true and dic[:a3][0] == true
+
+    return ['o',9 ] if dic[:a1][0] == 'o' and dic[:a2][0] == 'o' and dic[:a3][0] == 'o'
+    return ['o',10] if dic[:b1][0] == 'o' and dic[:b2][0] == 'o' and dic[:b3][0] == 'o'
+    return ['o',11] if dic[:c1][0] == 'o' and dic[:c2][0] == 'o' and dic[:c3][0] == 'o'
+    return ['o',12] if dic[:a1][0] == 'o' and dic[:b2][0] == 'o' and dic[:c3][0] == 'o'
+    return ['o',13] if dic[:c1][0] == 'o' and dic[:b2][0] == 'o' and dic[:a3][0] == 'o'
+    return ['o',14] if dic[:a1][0] == 'o' and dic[:b1][0] == 'o' and dic[:c1][0] == 'o'
+    return ['o',15] if dic[:b2][0] == 'o' and dic[:a2][0] == 'o' and dic[:c2][0] == 'o'
+    return ['o',16] if dic[:c3][0] == 'o' and dic[:b3][0] == 'o' and dic[:a3][0] == 'o'
+    return [false,false]
 end

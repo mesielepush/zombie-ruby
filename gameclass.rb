@@ -22,6 +22,8 @@ class GameWindow < Gosu::Window
     @end_game_screen = false
     @turn = ['player']
     @win = false
+    @winner = nil
+    @winning_screen_alpha = 0.0 
   end
   
   def draw_board
@@ -44,7 +46,9 @@ class GameWindow < Gosu::Window
   end
 
   def who_won?
-    winner, @combo = winning_combo(@board)
+    result = winning_combo(@board)
+    @winner, @combo = result[0], result[1]
+    return @winner, @combo
   end
 
   def place_play(coord)
@@ -74,7 +78,6 @@ class GameWindow < Gosu::Window
 
   def update
     if @gaming == false
-      
       if Gosu::button_down? @key[:kb_left] or Gosu::button_down? @key[:gp_left] then
         @mario.move :left
       end
@@ -100,18 +103,17 @@ class GameWindow < Gosu::Window
       @sounds[:intro].play(true)
       check_click
       @win = who_won?
-        if @win[0] != false
-          @end_game_screen = true 
-          @main = false
+      if @win[0] != false
+        @end_game_screen = true 
+        @main = false
       end
     end
 
     if @end_game_screen == true
+      @sounds[:win].play(false)
       @sounds[:intro].stop
       
-    end
-
-
+    end 
   end
 
   def draw
@@ -134,6 +136,21 @@ class GameWindow < Gosu::Window
       end
     end
     if @end_game_screen
+      
+      @img[:back_board].draw(0, 0, 0)
+      @winning_screen_alpha += 5
+      puts @winning_screen_alpha
+      if @winning_screen_alpha > 500
+        @winning_screen_alpha = 500
+      end
+      draw_quad(0,0, Gosu::Color.rgba(0,0,0,@winning_screen_alpha), 700, 0,
+                Gosu::Color.rgba(0,0,0,@winning_screen_alpha),
+                0, 700, Gosu::Color.rgba(0,0,0,@winning_screen_alpha),
+                700,700, Gosu::Color.rgba(0,0,0,@winning_screen_alpha), 0)
+      @img[:vertical_o].draw(395, 130, 0)
+      
+      
+    end
 
   end
 
