@@ -50,15 +50,29 @@ def load_metadata
             }
     square_coord = {
             a1: [208..350, 117..275],
-            a2: [208..350, 280..421],
-            a3: [208..350, 431..575],
-            b1: [378..540, 117..275],
+            a2: [378..540, 117..275],
+            a3: [561..699, 117..275],
+            b1: [208..350, 280..421],
             b2: [378..540, 280..421],
-            b3: [378..540, 431..575],
-            c1: [561..699, 117..275],
-            c2: [561..699, 280..421],
+            b3: [561..699, 280..421],
+            c1: [208..350, 431..575],
+            c2: [378..540, 431..575],
             c3: [561..699, 431..575]
             }
+    
     return key, board, square_coord
 end
-    
+
+def winning_combo(dic)
+    return [true,1] if dic[:a1][0] == true and dic[:a2][0] == true and dic[:a3][0] == true
+    return [true,2] if dic[:b1][0] == true and dic[:b2][0] == true and dic[:b3][0] == true
+    return [true,3] if dic[:c1][0] == true and dic[:c2][0] == true and dic[:c3][0] == true
+    return [true,4] if dic[:a1][0] == true and dic[:b2][0] == true and dic[:c3][0] == true
+    return [true,5] if dic[:c1][0] == true and dic[:b2][0] == true and dic[:a3][0] == true
+    return ['o',6]  if dic[:a1][0] == 'o' and dic[:a2][0] == 'o' and dic[:a3][0] == 'o'
+    return ['o',7]  if dic[:b1][0] == 'o' and dic[:b2][0] == 'o' and dic[:b3][0] == 'o'
+    return ['o',8]  if dic[:c1][0] == 'o' and dic[:c2][0] == 'o' and dic[:c3][0] == 'o'
+    return ['o',9]  if dic[:a1][0] == 'o' and dic[:b2][0] == 'o' and dic[:c3][0] == 'o'
+    return ['o',10] if dic[:c1][0] == 'o' and dic[:b2][0] == 'o' and dic[:a3][0] == 'o'
+    false
+end

@@ -4,7 +4,7 @@ require_relative 'eye_candy'
 
 
 class GameWindow < Gosu::Window
-  attr_writer :bestes_y, :title_y , :gaming, :board
+  attr_writer :bestes_y, :title_y , :gaming, :board, :main, :end_game_screen
   def initialize
     super 700, 700
     @mario = Eye_candy.new 0, 360
@@ -18,8 +18,10 @@ class GameWindow < Gosu::Window
     @title_y = 0
     @bestes_x = 700
     @gaming = false
+    @main = false
     @end_game_screen = false
     @turn = ['player']
+    @win = false
   end
   
   def draw_board
@@ -41,14 +43,8 @@ class GameWindow < Gosu::Window
     true if @turn.last == 'computer'
   end
 
-  def somebody_won?
-    
-    return true if @board[:a1][0] and @board[:a2][0] and @board[:a3][0]
-    return true if @board[:b1][0] and @board[:b2][0] and @board[:b3][0]
-    return true if @board[:c1][0] and @board[:c2][0] and @board[:c3][0]
-    return true if @board[:a1][0] and @board[:b2][0] and @board[:c3][0]
-    return true if @board[:c1][0] and @board[:b2][0] and @board[:a3][0]
-    false
+  def who_won?
+    winner, @combo = winning_combo(@board)
   end
 
   def place_play(coord)
@@ -87,7 +83,8 @@ class GameWindow < Gosu::Window
       end
       if Gosu::button_down? @key[:space]
         @sounds[:enter].play
-        @gaming = true
+        @main = true
+        @gaming = nil
       end
       @title_y += 2
       if @title_y > 70
@@ -99,17 +96,19 @@ class GameWindow < Gosu::Window
       end
     end
 
-    if @gaming == true
+    if @main == true
       @sounds[:intro].play(true)
       check_click
-      if somebody_won?
-        @end_game_screen = true 
-        @gaming = false
+      @win = who_won?
+        if @win[0] != false
+          @end_game_screen = true 
+          @main = false
       end
     end
 
     if @end_game_screen == true
       @sounds[:intro].stop
+      
     end
 
 
@@ -122,7 +121,7 @@ class GameWindow < Gosu::Window
       @img[:bestes].draw( @bestes_x,250, 1)
       @mario.draw
     end
-    if @gaming == true
+    if @main
       @img[:back_board].draw(0, 0, 0)
       @sounds[:intro_cover].stop
       draw_board
@@ -134,6 +133,8 @@ class GameWindow < Gosu::Window
         @img[:cursor].draw self.mouse_x, self.mouse_y, 0
       end
     end
+    if @end_game_screen
+
   end
 
   def button_up(id)
