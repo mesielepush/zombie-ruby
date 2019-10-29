@@ -5,9 +5,7 @@ class GameWindow < Gosu::Window
   def initialize
     super 640, 480
     self.caption = "Spritesheet animation example"
-
     @player = Player.new 320, 240
-
     @key = {kb_left: Gosu::KbLeft,
             kb_right: Gosu::KbRight,
             gp_left: Gosu::GpLeft,

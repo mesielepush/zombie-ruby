@@ -1,51 +1,8 @@
 require 'gosu'
+require_relative 'assets_loader'
+require_relative 'eye_candy'
+
 ################################### CLASSES ################################
-class Animation
-  def initialize(frames, time_in_secs)
-    @frames = frames
-    @time = time_in_secs * 1000    
-  end
-
-  def start
-    @frames[Gosu::milliseconds / @time % @frames.size]
-  end
-
-  def stop
-    @frames[0]
-  end
-end
-
-class Eye_candy
-  def initialize(x, y)
-    @frames = Gosu::Image.load_tiles 'mario.png', 69, 211
-    @x, @y = x, y
-    @move = {:left => Animation.new(@frames, 0.05),
-             :right => Animation.new(@frames, 0.05)}
-    @movements = {:left => -2.0, :right => 2.0}
-    @moving = false
-    @facing = :left
-  end
-
-  def draw
-    if @moving
-      @move[@facing].start.draw @x, @y, 1
-    else
-      @move[@facing].stop.draw @x, @y, 1
-    end
-  end
-
-  def move(direction)
-    @x += @movements[direction]
-    @x %= 710
-    
-    @facing = direction
-    @moving = true if @moving != true
-  end
-
-  def stop_move
-    @moving = false if @moving != false
-  end
-end
 
 ################################### GAME MAIN ################################
 
@@ -55,41 +12,15 @@ class GameWindow < Gosu::Window
     super 700, 700
     @player = Eye_candy.new 0, 360
     
-    @key = {kb_left: Gosu::KbLeft,
-            kb_right: Gosu::KbRight,
-            gp_left: Gosu::GpLeft,
-            gp_right: Gosu::GpRight,
-            enter: Gosu::KB_RETURN,
-            space: Gosu::KB_SPACE,
-            m_left: Gosu::MS_LEFT,
-            m_right: Gosu::MS_RIGHT
-            }
-    @board ={
-            a1: [false, nil, nil],
-            a2: [false, nil, nil],
-            a3: [false, nil, nil],
-            b1: [false, nil, nil],
-            b2: [false, nil, nil],
-            b3: [false, nil, nil],
-            c1: [false, nil, nil],
-            c2: [false, nil, nil],
-            c3: [false, nil, nil],
-            }
-    @xs = []
-    @xs << Gosu::Image.new("4.png")
-    @xs << Gosu::Image.new("5.png")
-    @xs << Gosu::Image.new("6.png")
-    @os = []
-    @os << Gosu::Image.new("1.png")
-    @os << Gosu::Image.new("2.png")
-    @os << Gosu::Image.new("3.png")
+    @key , @board = load_metadata
+    @xs, @os, img = load_audiovisual
 
-    @background = Gosu::Image.new("back.png")
-    @title      = Gosu::Image.new("title.png")
-    @bestes     = Gosu::Image.new("bestes.png")
-    @back_board = Gosu::Image.new('back_game.png')
-    @cursor = Gosu::Image.new('cursor.png')
-    @cursor_down = Gosu::Image.new('cursor_down.png')
+    @background  = img[:background]
+    @title       = img[:title]
+    @bestes      = img[:bestes]
+    @back_board  = img[:back_board]
+    @cursor      = img[:cursor]
+    @cursor_down = img[:cursor_down]
 
     @intro_1      = Gosu::Song.new('intro_1.mp3')
     @intro      = Gosu::Song.new('intro.mp3')

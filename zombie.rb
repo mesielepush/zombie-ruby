@@ -58,11 +58,13 @@ end
 
 class Board
   def initialize
+    @back_wood = Image.new('background.png',x: 30, y:30)
+    @board = Image.new('back_wood.png',z:-1)
   end
 
   def draw
-    @back_wood = Image.new('background.png',x: 30, y:30)
-    @board = Image.new('back_wood.png',z:-1)
+    @back_wood.draw
+    @board.draw
   end
 end
 
@@ -82,6 +84,7 @@ update do
   if game_started
     title.remove
     game.draw
+
   end
 end
 
