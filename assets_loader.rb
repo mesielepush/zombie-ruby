@@ -66,6 +66,7 @@ def load_metadata
     return key, board, square_coord
 end
 
+
 def winning_combo(dic)
     return [true,1] if dic[:a1][0] == true and dic[:a2][0] == true and dic[:a3][0] == true
     return [true,2] if dic[:b1][0] == true and dic[:b2][0] == true and dic[:b3][0] == true
